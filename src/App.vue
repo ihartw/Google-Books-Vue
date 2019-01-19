@@ -23,7 +23,7 @@
     import Connectivity from './components/Connectivity'
 
     export default {
-        name: 'BooksCarousel',
+        name: 'App',
         components: {
             'nav-bar': NavBar,
             'loading-bar': LoadingBar,
