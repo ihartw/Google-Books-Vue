@@ -10,8 +10,8 @@ Vue.use(VueResource)
 Vue.config.productionTip = false
 
 new Vue({
-	created: function() {
-		document.getElementById('preloader').style.display = "none";
-	},
-	render: h => h(App)
+    created: function() {
+        document.getElementById('preloader').style.display = "none";
+    },
+    render: h => h(App)
 }).$mount('#app')
