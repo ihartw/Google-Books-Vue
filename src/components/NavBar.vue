@@ -37,9 +37,7 @@
       },
       submitValue() {
         if (this.input == '') {
-          M.toast({
-            html: 'No search value entered'
-          });
+          M.toast({html: 'No search value entered'});
         };
         this.$emit('submitValue');
       },
