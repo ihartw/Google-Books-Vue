@@ -1,5 +1,5 @@
 <template> 
-  <nav class="navbar blue-grey lighten-5">
+  <nav class="navbar white">
     <div class="nav-wrapper">
       <form v-on:submit.prevent>
         <div class="input-field">
