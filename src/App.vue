@@ -1,86 +1,67 @@
 <template>
-<div id="app" class="animated fadeIn">
-  <nav-bar :userInput="input" @changedValue="input = $event" @submitValue="searchBooks" @inputCleared="input = $event">
-  </nav-bar>
-  <loading-bar :loading="loading"></loading-bar>
-  <title-section :input="input" :isTyping="isTyping"></title-section>
-  <book-results :input='input' :books="books"></book-results>
-  <user-helper></user-helper>
-  <connectivity></connectivity>
-</div>
+  <div id="app" class="animated fadeIn">
+    <nav-bar :userInput="input" @changedValue="input = $event" @submitValue="searchBooks" @inputCleared="input = $event"/>
+    <loading-bar :loading="loading"/>
+    <title-section :input="input"/>
+    <book-results :input='input' :books="books" :loading="loading"/>
+    <user-helper/>
+    <connectivity/>
+  </div>
 </template>
 
 <script>
-import NavBar from './components/NavBar'
-import LoadingBar from './components/LoadingBar'
-import UserHelper from './components/UserHelper'
-import TitleSection from './components/TitleSection'
-import BookResults from './components/BookResults'
-import Connectivity from './components/Connectivity'
+  import NavBar from './components/NavBar'
+  import LoadingBar from './components/LoadingBar'
+  import UserHelper from './components/UserHelper'
+  import TitleSection from './components/TitleSection'
+  import BookResults from './components/BookResults'
+  import Connectivity from './components/Connectivity'
 
-export default {
-  name: 'App',
-  components: {
-    'nav-bar': NavBar,
-    'loading-bar': LoadingBar,
-    'user-helper': UserHelper,
-    'title-section': TitleSection,
-    'book-results': BookResults,
-    'connectivity': Connectivity
-  },
-  props: ['userInput'],
-  data: function() {
-    return {
-      input: '',
-      books: [],
-      loading: false,
-      isTyping: false,
-      title: ''
-    }
-  },
-  watch: {
-    input: function() {
-      this.isTyping = true
-      let self = this
-      setTimeout(function() {
-        self.isTyping = false
-      }, 500);
-    }
-  },
-  methods: {
-    searchBooks: function(event) {
-      this.loading = true
-      let search = this.input;
-      let queryURL = 'https://www.googleapis.com/books/v1/volumes?q=' + search
-      this.$http.get(queryURL).then((data) => {
+  export default {
+    name: 'App',
+    components: {
+      'nav-bar': NavBar,
+      'loading-bar': LoadingBar,
+      'user-helper': UserHelper,
+      'title-section': TitleSection,
+      'book-results': BookResults,
+      'connectivity': Connectivity
+    },
+    props: ['userInput'],
+    data() {
+      return {
+        input: '',
+        books: [],
+        loading: false,
+        title: ''
+      }
+    },
+    methods: {
+      searchBooks() {
+        this.loading = true
+        let search = this.input;
+        let queryURL = 'https://www.googleapis.com/books/v1/volumes?q=' + search
+        this.$http.get(queryURL).then((data) => {
           this.books = data.body.items;
-        })
-        .then(() => {
+        }).then(() => {
           let elems = document.querySelectorAll('.carousel');
           let instances = M.Carousel.init(elems);
-          this.loading = false
-          this.results = true
-          console.log(this.results)
-        })
-        .catch((error) => {
-          this.loading = false
+          this.loading = false;
+        }).catch((error) => {
+          this.loading = false;
           console.log(error);
           M.toast({
-            html: 'Oops! Something went wrong!'
+            html: 'Error while fetching books. Please try again later.'
           });
         });
+      }
     }
   }
-}
 </script>
 
 <style>
-body {
-  background: #f4f4f4;
-}
-
-#app {
-  text-align: center;
-  margin-bottom: 50px;
-}
+  #app {
+    text-align: center;
+    margin-bottom: 50px;
+  }
 </style>
